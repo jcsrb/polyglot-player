@@ -1,0 +1,39 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build universal app
+        run: |
+          version=${GITHUB_REF_NAME#v}
+          [[ $GITHUB_REF == refs/tags/v* ]] || version=0.0.0-dev
+          UNIVERSAL=1 VERSION=$version scripts/build-app.sh
+
+      - name: Zip
+        run: ditto -c -k --keepParent build/Polyglot.app build/Polyglot.zip
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Polyglot
+          path: build/Polyglot.zip
+
+      - name: Publish release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" build/Polyglot.zip \
+            --title "Polyglot $GITHUB_REF_NAME" \
+            --notes "Universal build (Apple Silicon and Intel), macOS 14 or later. The app is not notarized: see [First launch](https://github.com/${GITHUB_REPOSITORY}#first-launch) in the README."

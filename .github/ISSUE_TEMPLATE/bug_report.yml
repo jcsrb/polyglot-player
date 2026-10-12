@@ -1,0 +1,38 @@
+name: Bug report
+description: Something doesn't play, sync, or route as expected
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting! Please describe the file by its **format**, not its name. Issues containing file names of copyrighted releases or links to downloads will be closed.
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: streams
+    attributes:
+      label: File format
+      description: "Output of: ffprobe -v error -show_entries stream=codec_type,codec_name,channels:stream_tags=language -of compact yourfile"
+      render: text
+  - type: input
+    id: devices
+    attributes:
+      label: Output devices
+      description: e.g. MacBook speakers + AirPods Pro 2, HDMI TV + Sony WH-1000XM5
+  - type: input
+    id: versions
+    attributes:
+      label: Polyglot and macOS version
+      description: e.g. Polyglot 0.1.0, macOS 15.3, Apple Silicon
+    validations:
+      required: true
+  - type: textarea
+    id: log
+    attributes:
+      label: Sync log (optional)
+      description: "For sync problems: run /Applications/Polyglot.app/Contents/MacOS/Polyglot yourfile with POLYGLOT_DEBUG=1 set, and paste a few lines."
+      render: text
