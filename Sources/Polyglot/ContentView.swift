@@ -82,7 +82,7 @@ private struct RoutingPanel: View {
             } header: {
                 Text("Audio Tracks")
             } footer: {
-                Text("Latency compensation plays a track early. Bluetooth headphones usually need 150–250 ms.")
+                Text("Match each device to the picture: play it early if it lags (Bluetooth headphones usually need 150–250 ms), late if it runs ahead.")
                     .foregroundStyle(.secondary)
             }
         }
@@ -133,12 +133,20 @@ private struct RouteRow: View {
                     get: { engine.offsetMs(for: route.output) },
                     set: { engine.setOffsetMs($0, for: route.output) }
                 ), in: -500...1000, step: 10) {
-                    Text("Latency compensation: \(Int(engine.offsetMs(for: route.output))) ms")
+                    Text(Self.offsetLabel(engine.offsetMs(for: route.output)))
                         .monospacedDigit()
                 }
             }
         }
         .padding(.vertical, 4)
+    }
+
+    private static func offsetLabel(_ ms: Double) -> String {
+        switch Int(ms) {
+        case 0: "In sync with video"
+        case let early where early > 0: "Plays \(early) ms early"
+        case let late: "Plays \(-late) ms late"
+        }
     }
 }
 
