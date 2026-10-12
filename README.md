@@ -45,6 +45,8 @@ scripts/to-mp4.sh movie.mkv     # writes movie.mp4, keeping every audio track an
 
 Audio formats macOS can't play (DTS, TrueHD, Opus, FLAC) are converted to AAC. Subtitles are not kept.
 
+Notes on opening MKV directly, without the conversion step, are in [docs/mkv-support.md](docs/mkv-support.md).
+
 ## How it works
 
 The video plays in a silent `AVPlayer` that acts as the master clock. Each audio track gets its own audio-only `AVPlayer`, routed with `audioOutputDeviceUniqueID`. All players run on the host clock. On play, seek and pause, each audio player is scheduled with `setRate(_:time:atHostTime:)` to start exactly where the video will be, shifted by its device's latency offset. A drift check every 0.5 s resyncs any track that is more than 40 ms off.
