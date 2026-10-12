@@ -4,7 +4,9 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting! Please describe the file by its **format**, not its name. Issues containing file names of copyrighted releases or links to downloads will be closed.
+        Polyglot is an experiment shared as is, without support, so this issue may not get a response. Reports still help others who hit the same problem.
+
+        Please describe the file by its **format**, not its name. Issues containing file names of copyrighted releases or links to downloads will be closed.
   - type: textarea
     id: what
     attributes:

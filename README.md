@@ -1,12 +1,16 @@
 <img src="Resources/AppIcon.png" width="128" alt="Polyglot icon">
 
-# Polyglot
+# Polyglot: play a movie's audio tracks on different devices at the same time
 
 A small macOS video player that plays several audio tracks of the same video **at the same time, each on its own output device**.
 
-Example: the video and its German audio play on the TV, while the English audio plays on your headphones, in sync and paused and seeked together.
+Example: the video and its German dub play on the TV, while the original English audio plays in your headphones, in sync and paused and seeked together.
 
-Typical players (VLC, QuickTime, IINA, mpv) play one audio track at a time, to one device. Polyglot is built for households where people want to watch together in different languages.
+Typical players (VLC, QuickTime, IINA, mpv) play one audio track at a time, to one device. Polyglot is built for households where people want to watch together in different languages: two languages at once, one on the speakers and one on Bluetooth headphones or AirPods.
+
+**[Download for Mac](https://github.com/jcsrb/polyglot-player/releases/latest/download/Polyglot.zip)** · [Website](https://jcsrb.github.io/polyglot-player/)
+
+> **Status: experiment.** Polyglot was built in an evening, with help from an AI coding assistant (Claude Code), to solve one family's movie nights. It has been tested on one Mac, with its built-in speakers, a USB-C monitor and Bluetooth headphones. It works for us, but expect rough edges. It's shared as is, with **no support**: issues may go unanswered, and forks are welcome.
 
 ![Polyglot playing a video with English on headphones, German on a monitor and French off](docs/screenshot.png)
 

@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polyglot: play a movie's audio tracks on different devices at the same time (Mac)</title>
+<meta name="description" content="Free Mac video player that plays two or more audio tracks at once, each on a different device: the dub on the TV, the original language in your headphones or AirPods. In sync, paused and seeked together.">
+<link rel="canonical" href="https://jcsrb.github.io/polyglot-player/">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="icon.png">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Polyglot: every audio track on its own device">
+<meta property="og:description" content="The dub on the TV, the original in your headphones. A free Mac video player that plays different audio tracks on different devices, in sync.">
+<meta property="og:url" content="https://jcsrb.github.io/polyglot-player/">
+<meta property="og:image" content="https://jcsrb.github.io/polyglot-player/social-preview.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Polyglot",
+  "description": "Mac video player that plays different audio tracks of a movie on different output devices at the same time, in sync.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "macOS 14 or later",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "downloadUrl": "https://github.com/jcsrb/polyglot-player/releases/latest/download/Polyglot.zip",
+  "image": "https://jcsrb.github.io/polyglot-player/icon.png",
+  "license": "https://opensource.org/licenses/MIT"
+}
+</script>
+
+<style>
+  :root {
+    --bg: #f6f7fb;
+    --surface: #ffffff;
+    --text: #141a33;
+    --muted: #59607a;
+    --border: #e2e5f0;
+    --accent: #5b4bdb;
+    --accent-text: #ffffff;
+    --orange: #e97a12;
+    --teal: #0aa6a0;
+    --violet: #7a5cf0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1027;
+      --surface: #141a3a;
+      --text: #eef0fa;
+      --muted: #a3aac6;
+      --border: #262e57;
+      --accent: #8b7bff;
+      --accent-text: #0b1027;
+      --orange: #ffa33a;
+      --teal: #5fe6dc;
+      --violet: #a58bff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 20px; }
+
+  header.hero { padding-top: 72px; padding-bottom: 40px; text-align: center; }
+  .hero img.icon { width: 132px; height: 132px; filter: drop-shadow(0 14px 28px rgba(0,0,0,.25)); }
+  h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.08; letter-spacing: -1px; margin: 18px 0 14px; }
+  .tagline { font-size: clamp(20px, 3vw, 26px); font-weight: 600; margin: 0 0 14px; }
+  .tagline .o { color: var(--orange); } .tagline .t { color: var(--teal); } .tagline .v { color: var(--violet); }
+  .lede { color: var(--muted); max-width: 640px; margin: 0 auto 28px; font-size: 19px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .button {
+    display: inline-block; padding: 13px 24px; border-radius: 12px; font-weight: 650; text-decoration: none;
+    background: var(--accent); color: var(--accent-text);
+  }
+  .button.secondary { background: transparent; color: var(--text); border: 1px solid var(--border); }
+  .fine { color: var(--muted); font-size: 14px; margin-top: 12px; }
+  .pill {
+    display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .4px; text-transform: uppercase;
+    color: var(--orange); border: 1px solid currentColor; border-radius: 999px; padding: 3px 12px; margin-top: 18px;
+  }
+  .status { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--orange); border-radius: 12px; padding: 16px 22px; }
+  .status p { margin: 0; color: var(--muted); }
+  .status strong { color: var(--text); }
+
+  .shot { margin: 36px auto 0; }
+  .shot img { width: 100%; height: auto; display: block; }  /* the screenshot carries its own window shadow */
+
+  section { padding: 56px 0 8px; }
+  h2 { font-size: 30px; letter-spacing: -.4px; margin: 0 0 22px; }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+  .card h3 { margin: 0 0 6px; font-size: 18px; }
+  .card p { margin: 0; color: var(--muted); }
+  .step { font-weight: 700; font-size: 14px; letter-spacing: .5px; text-transform: uppercase; margin-bottom: 8px; }
+  .step.o { color: var(--orange); } .step.t { color: var(--teal); } .step.v { color: var(--violet); }
+
+  ul.features { columns: 2; column-gap: 36px; padding-left: 20px; margin: 0; }
+  ul.features li { break-inside: avoid; margin-bottom: 10px; }
+
+  details { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px 20px; margin-bottom: 10px; }
+  summary { font-weight: 650; cursor: pointer; }
+  details p { color: var(--muted); margin: 10px 0 2px; }
+  code { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--border); padding: 2px 6px; border-radius: 6px; word-break: break-word; }
+
+  footer { padding: 56px 0 48px; color: var(--muted); font-size: 15px; text-align: center; }
+
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  @media (max-width: 760px) {
+    header.hero { padding-top: 48px; }
+    .grid { grid-template-columns: 1fr; }
+    ul.features { columns: 1; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero wrap">
+  <img class="icon" src="icon.png" alt="Polyglot app icon" width="132" height="132">
+  <div><span class="pill">Experiment · v0.1</span></div>
+  <h1>Play a movie's audio tracks on different devices at the same time</h1>
+  <p class="tagline"><span class="o">The dub on the TV.</span> <span class="t">The original in your headphones.</span> <span class="v">In sync.</span></p>
+  <p class="lede">Polyglot is a free Mac video player for watching together in different languages. Every audio track of a video can play on its own speaker, TV or pair of Bluetooth headphones, all at once.</p>
+  <div class="cta">
+    <a class="button" href="https://github.com/jcsrb/polyglot-player/releases/latest/download/Polyglot.zip">Download for Mac</a>
+    <a class="button secondary" href="https://github.com/jcsrb/polyglot-player">View on GitHub</a>
+  </div>
+  <p class="fine">Free and open source (MIT) · macOS 14 or later · Apple Silicon and Intel</p>
+
+  <div class="shot">
+    <img src="screenshot.png" width="1400" height="780" alt="Polyglot window: a video on the left, and on the right each audio track (English, German, French) with its own output device picker, volume and latency setting">
+  </div>
+</header>
+
+<main class="wrap">
+  <section aria-labelledby="status" style="padding-top: 40px">
+    <h2 id="status" class="sr-only">Status</h2>
+    <div class="status">
+      <p><strong>This is an experiment.</strong> Polyglot was built in an evening, with help from an AI coding assistant, to solve one family's movie nights. It has been tested on one Mac, with its built-in speakers, a USB-C monitor and Bluetooth headphones. It works for us, but expect rough edges. It's shared as is, with <strong>no support</strong>: <a href="https://github.com/jcsrb/polyglot-player/issues">issues</a> may go unanswered, and forks are welcome.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="how">
+    <h2 id="how">How it works</h2>
+    <div class="grid">
+      <div class="card">
+        <div class="step o">Step 1</div>
+        <h3>Open a movie</h3>
+        <p>Any video with more than one audio track: MP4, MOV, or MKV. Drop it on the window or press ⌘O.</p>
+      </div>
+      <div class="card">
+        <div class="step t">Step 2</div>
+        <h3>Pick a device per language</h3>
+        <p>German to the TV, English to your AirPods, French off. Every connected output is listed.</p>
+      </div>
+      <div class="card">
+        <div class="step v">Step 3</div>
+        <h3>Watch together</h3>
+        <p>Pause, seek and resume as usual. Every track follows the picture, and Polyglot remembers your choices.</p>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="features">
+    <h2 id="features">Features</h2>
+    <ul class="features">
+      <li>Two, three or more audio tracks at the same time, each on a different output device</li>
+      <li>Works with any output macOS lists (tested so far: built-in speakers, a USB-C monitor and Bluetooth headphones)</li>
+      <li>One video, one timeline: pause, seek and playback speed apply to every track</li>
+      <li>Latency compensation per device, so Bluetooth headphones stay in sync with the lips on screen</li>
+      <li>Volume per track, plus a master volume</li>
+      <li>Remembers which language goes to which device</li>
+      <li>Opens MKV files with a quick automatic conversion (the video is copied, not re-encoded)</li>
+      <li>Native Mac app built on Apple's AVFoundation</li>
+    </ul>
+  </section>
+
+  <section aria-labelledby="faq">
+    <h2 id="faq">Questions</h2>
+
+    <details open>
+      <summary>Can I play two audio tracks of a movie at the same time on different speakers?</summary>
+      <p>Yes, that's exactly what Polyglot does. Each audio track gets its own output device, so one language plays on the TV or speakers while another plays in headphones, at the same time and in sync with the video.</p>
+    </details>
+
+    <details>
+      <summary>How do I listen to the original language in headphones while everyone else hears the dub?</summary>
+      <p>Open the movie in Polyglot, set the dubbed track to your TV or speakers and the original-language track to your headphones. If your headphones are Bluetooth, nudge the latency setting until voices match the lips on screen. Polyglot remembers it for next time.</p>
+    </details>
+
+    <details>
+      <summary>Does it work with AirPods and other Bluetooth headphones?</summary>
+      <p>It should with any Bluetooth headphones macOS can play to (tested so far with one pair). Bluetooth adds roughly 150–250 ms of delay, so Polyglot plays Bluetooth devices 200 ms early by default, and you can fine-tune it per device.</p>
+    </details>
+
+    <details>
+      <summary>Can't VLC, QuickTime or IINA do this?</summary>
+      <p>No. They play one audio track at a time, to one device. The usual workaround, two VLC windows, drifts apart and doesn't pause or seek together. A macOS Aggregate Device keeps sync, but needs a specially prepared file and manual setup.</p>
+    </details>
+
+    <details>
+      <summary>Which files does it play?</summary>
+      <p>Local MP4 and MOV files with H.264 or HEVC video play directly. MKV files are converted automatically when you open them, which needs <a href="https://ffmpeg.org">ffmpeg</a> (<code>brew install ffmpeg</code>) and takes seconds. Polyglot is meant for videos you own or have the rights to watch.</p>
+    </details>
+
+    <details>
+      <summary>macOS says it can't verify the app. What do I do?</summary>
+      <p>Polyglot isn't notarized by Apple yet. Open it once, then go to System Settings → Privacy &amp; Security and click "Open Anyway". Or run <code>xattr -dr com.apple.quarantine /Applications/Polyglot.app</code> in Terminal.</p>
+    </details>
+
+    <details>
+      <summary>Is there a Windows, Linux, iPhone or Apple TV version?</summary>
+      <p>iPhone, iPad and Apple TV can't do it: they only allow one audio output at a time. Windows and Linux can, and a <a href="https://github.com/jcsrb/polyglot-player/blob/main/docs/other-platforms.md">guide for building those versions</a> is waiting for contributors.</p>
+    </details>
+  </section>
+</main>
+
+<footer class="wrap">
+  <p>Polyglot is free and open source under the MIT licence. <a href="https://github.com/jcsrb/polyglot-player">Source code, issues and releases on GitHub</a>.</p>
+</footer>
+
+</body>
+</html>
