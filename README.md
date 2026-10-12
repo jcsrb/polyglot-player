@@ -1,3 +1,5 @@
+<img src="Resources/AppIcon.png" width="128" alt="Polyglot icon">
+
 # Polyglot
 
 A small macOS video player that plays several audio tracks of the same video **at the same time, each on its own output device**.
