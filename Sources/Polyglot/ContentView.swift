@@ -48,7 +48,16 @@ private struct EmptyState: View {
 
     var body: some View {
         VStack(spacing: 12) {
-            if engine.isLoading {
+            if let progress = engine.conversionProgress {
+                Text("Converting for playback…")
+                    .font(.title3)
+                ProgressView(value: progress)
+                    .frame(width: 260)
+                Text("Video is copied, not re-encoded. Converted files are cached, so this only happens once.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            } else if engine.isLoading {
                 ProgressView()
             } else {
                 Image(systemName: "film.stack")

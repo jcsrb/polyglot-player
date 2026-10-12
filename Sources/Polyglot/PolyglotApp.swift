@@ -52,7 +52,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     func showOpenPanel() {
         let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.movie]
+        panel.allowedContentTypes = [.movie] + ["mkv", "webm"].compactMap { UTType(filenameExtension: $0) }
         if panel.runModal() == .OK, let url = panel.url { open(url) }
     }
 

@@ -27,6 +27,8 @@ final class PlaybackEngine {
     private(set) var routes: [Route] = []
     private(set) var title = ""
     private(set) var isLoading = false
+    /// Set while a file macOS can't open directly (e.g. MKV) is being converted; 0...1.
+    private(set) var conversionProgress: Double?
     private(set) var errorMessage: String?
     private(set) var offsetsMs: [String: Double]
 
@@ -65,7 +67,13 @@ final class PlaybackEngine {
         errorMessage = nil
 
         do {
-            let asset = AVURLAsset(url: url)
+            var asset = AVURLAsset(url: url)
+            if !((try? await asset.load(.isPlayable)) ?? false) {
+                conversionProgress = 0
+                defer { conversionProgress = nil }
+                let converted = try await Remuxer.playableCopy(of: url) { [weak self] in self?.conversionProgress = $0 }
+                asset = AVURLAsset(url: converted)
+            }
             guard let videoTrack = try await asset.loadTracks(withMediaType: .video).first else {
                 throw LoadError("\(url.lastPathComponent) has no video track macOS can play.")
             }
@@ -91,11 +99,32 @@ final class PlaybackEngine {
             title = url.lastPathComponent
             startFollowing()
             routes.forEach(apply)
-            video.play()
+            try await waitUntilReady()
+            startTogether()
         } catch {
             unload()
             errorMessage = (error as? LoadError)?.message ?? error.localizedDescription
+            log("load failed: \(errorMessage ?? "")")
         }
+    }
+
+    /// Starting before every item is ready makes audio start late, until the first drift correction.
+    private func waitUntilReady() async throws {
+        let items = ([video] + audioPlayers.values).compactMap(\.currentItem)
+        for _ in 0..<200 where items.contains(where: { $0.status != .readyToPlay }) {
+            if let failed = items.first(where: { $0.status == .failed }) {
+                throw failed.error ?? LoadError("This file could not be played.")
+            }
+            try await Task.sleep(for: .milliseconds(25))
+        }
+    }
+
+    private func startTogether() {
+        let hostTime = CMClockGetTime(hostClock) + Self.startLead
+        for route in routes where route.output != .off {
+            audioPlayers[route.id]?.setRate(1, time: offset(route), atHostTime: hostTime)
+        }
+        video.setRate(1, time: .zero, atHostTime: hostTime)
     }
 
     private func unload() {
