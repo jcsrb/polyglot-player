@@ -58,6 +58,9 @@ Two players on different devices drift apart and don't pause or seek together. A
 **iPhone, iPad or Apple TV version?**
 Not possible: iOS and tvOS let an app play audio to only one output at a time.
 
+**Windows or Linux?**
+Not yet, but both platforms can do it, and contributions are very welcome. [docs/other-platforms.md](docs/other-platforms.md) has the APIs, starting sketches and a test plan.
+
 **Subtitles?**
 Not yet. With everyone on their own audio track they matter less, and disc subtitles (PGS, VobSub) are images that AVFoundation can't show.
 
